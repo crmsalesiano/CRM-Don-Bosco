@@ -247,7 +247,7 @@ table tr:first-child td { border-top: none; }
   background: var(--surface); border: 1px solid var(--border); border-radius: 20px;
   padding: 40px; width: 320px; text-align: center;
 }
-.pin-card input {
+.pin-card > input {
   width: 100%; text-align: center; letter-spacing: 6px; font-size: 24px;
   height: 54px; border: 2px solid var(--border); border-radius: 12px; margin: 18px 0; outline: none;
 }
