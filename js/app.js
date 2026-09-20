@@ -12,6 +12,13 @@ if (cfg.SUPABASE_URL && !cfg.SUPABASE_URL.startsWith('PEGA_AQUI')) {
 const content = document.getElementById('content');
 let currentUser = null; // { id, nombre, email, rol }
 
+// Capturamos esto ANTES de que Supabase procese y borre el hash de la URL.
+// type=invite o type=recovery significa "esta persona necesita crear su
+// contraseña", no un login normal.
+const hashParams = new URLSearchParams(location.hash.replace(/^#/, ''));
+const authFlowType = hashParams.get('type');
+const authFlowError = hashParams.get('error_description');
+
 // ------------------------------------------------------------
 // Utilidades
 // ------------------------------------------------------------
@@ -783,13 +790,53 @@ async function submitLogin() {
 document.getElementById('login-submit').addEventListener('click', submitLogin);
 document.getElementById('login-password').addEventListener('keydown', e => { if (e.key === 'Enter') submitLogin(); });
 
+document.getElementById('forgot-password-link').addEventListener('click', async (e) => {
+  e.preventDefault();
+  const email = document.getElementById('login-email').value.trim();
+  const errorBox = document.getElementById('login-error');
+  if (!email) { errorBox.textContent = 'Escribe tu correo arriba y presiona el enlace de nuevo'; return; }
+  errorBox.style.color = '';
+  const { error } = await sb.auth.resetPasswordForEmail(email, { redirectTo: window.location.origin });
+  if (error) { errorBox.textContent = 'Error: ' + error.message; return; }
+  errorBox.style.color = 'var(--accent)';
+  errorBox.textContent = 'Te enviamos un correo con instrucciones.';
+});
+
+function showSetPasswordGate() {
+  document.getElementById('login-gate').style.display = 'none';
+  document.getElementById('setpass-gate').style.display = 'flex';
+}
+
+async function submitSetPassword() {
+  const p1 = document.getElementById('setpass-1').value;
+  const p2 = document.getElementById('setpass-2').value;
+  const err = document.getElementById('setpass-error');
+  err.textContent = '';
+  if (!p1 || p1.length < 6) { err.textContent = 'La contraseña debe tener al menos 6 caracteres'; return; }
+  if (p1 !== p2) { err.textContent = 'Las contraseñas no coinciden'; return; }
+  const { error } = await sb.auth.updateUser({ password: p1 });
+  if (error) { err.textContent = 'Error: ' + error.message; return; }
+  document.getElementById('setpass-gate').style.display = 'none';
+  const { data: { session } } = await sb.auth.getSession();
+  await onLoggedIn(session);
+}
+document.getElementById('setpass-submit').addEventListener('click', submitSetPassword);
+document.getElementById('setpass-2').addEventListener('keydown', e => { if (e.key === 'Enter') submitSetPassword(); });
+
 async function checkSessionAndStart() {
   if (!sb) {
     document.querySelector('#login-gate .pin-card').innerHTML = `<div class="empty-state">⚠️ Falta configurar la conexión con Supabase en <code>js/config.js</code>.</div>`;
     return;
   }
+  if (authFlowError) {
+    document.getElementById('login-error').textContent = 'El enlace no es válido o ya expiró. Pide que te reenvíen la invitación.';
+  }
   const { data: { session } } = await sb.auth.getSession();
-  if (session) await onLoggedIn(session);
+  if (session && (authFlowType === 'invite' || authFlowType === 'recovery')) {
+    showSetPasswordGate();
+  } else if (session) {
+    await onLoggedIn(session);
+  }
 }
 
 checkSessionAndStart();

@@ -24,6 +24,27 @@
     </div>
     <div class="pin-error" id="login-error"></div>
     <button class="btn btn-primary btn-block" id="login-submit">Entrar</button>
+    <div style="margin-top:14px;">
+      <a href="#" id="forgot-password-link" style="font-size:14px;color:var(--accent);">¿Olvidaste tu contraseña?</a>
+    </div>
+  </div>
+</div>
+
+<!-- Pantalla para crear contraseña (usuarios invitados o recuperando acceso) -->
+<div id="setpass-gate" style="display:none;">
+  <div class="pin-card" style="width:340px;">
+    <div class="display" style="font-size:22px;color:var(--accent);margin-bottom:6px;">Bienvenido</div>
+    <div class="muted" style="font-size:15px;margin-bottom:16px;">Crea tu contraseña para continuar</div>
+    <div class="field" style="text-align:left;">
+      <label>Nueva contraseña</label>
+      <input id="setpass-1" type="password" placeholder="Mínimo 6 caracteres">
+    </div>
+    <div class="field" style="text-align:left;">
+      <label>Confirmar contraseña</label>
+      <input id="setpass-2" type="password" placeholder="Repite la contraseña">
+    </div>
+    <div class="pin-error" id="setpass-error"></div>
+    <button class="btn btn-primary btn-block" id="setpass-submit">Guardar y entrar</button>
   </div>
 </div>
 

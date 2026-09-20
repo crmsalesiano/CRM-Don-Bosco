@@ -239,7 +239,7 @@ table tr:first-child td { border-top: none; }
 
 /* ---------- PIN gate ---------- */
 
-#pin-gate {
+#login-gate, #setpass-gate {
   position: fixed; inset: 0; background: var(--bg); display: flex;
   align-items: center; justify-content: center; z-index: 100;
 }
