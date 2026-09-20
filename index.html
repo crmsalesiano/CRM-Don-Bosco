@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Directorio Parroquial</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Public+Sans:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<!-- Pantalla de inicio de sesión -->
+<div id="login-gate">
+  <div class="pin-card" style="width:340px;">
+    <div class="display" style="font-size:22px;color:var(--accent);margin-bottom:6px;">Directorio Parroquial</div>
+    <div class="muted" style="font-size:15px;margin-bottom:16px;">Inicia sesión para continuar</div>
+    <div class="field" style="text-align:left;">
+      <label>Correo</label>
+      <input id="login-email" type="email" placeholder="tucorreo@ejemplo.com">
+    </div>
+    <div class="field" style="text-align:left;">
+      <label>Contraseña</label>
+      <input id="login-password" type="password" placeholder="••••••••">
+    </div>
+    <div class="pin-error" id="login-error"></div>
+    <button class="btn btn-primary btn-block" id="login-submit">Entrar</button>
+  </div>
+</div>
+
+<!-- App -->
+<div id="app-shell" style="display:none;">
+  <nav id="sidebar">
+    <div class="brand">Directorio Parroquial</div>
+    <button class="nav-link" data-route="menu">Inicio</button>
+    <button class="nav-link" data-route="directorio">Directorio de talentos</button>
+    <button class="nav-link" data-route="grupos">Grupos y ministerios</button>
+    <button class="nav-link" data-route="calendario">Calendario</button>
+    <button class="nav-link" data-route="sacramentos">Sacramentos</button>
+    <button class="nav-link" data-route="avisos">Avisos</button>
+    <button class="nav-link" data-route="usuarios" id="nav-usuarios" style="display:none;">Usuarios</button>
+    <div style="flex-grow:1;"></div>
+    <button class="nav-link" id="btn-logout" style="color:var(--danger);">Cerrar sesión</button>
+  </nav>
+  <main id="content"></main>
+</div>
+
+<div id="toast-container"></div>
+
+<script type="module" src="js/config.js"></script>
+<script type="module" src="js/app.js"></script>
+</body>
+</html>
